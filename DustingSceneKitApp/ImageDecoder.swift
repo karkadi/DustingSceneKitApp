@@ -9,6 +9,7 @@ import UIKit
 import CoreGraphics
 
 // ImageDecoder with async support
+@MainActor
 class ImageDecoder {
     struct ImageInfo {
         let width: Int
@@ -27,7 +28,8 @@ class ImageDecoder {
             print("Image not found")
             return nil
         }
-        return ImageDecoder.decodeImageToPixels( image)
+        
+        return decodeImageToPixels(image)
     }
     
     static func decodeImageToPixels(from url: URL) async -> ImageInfo? {

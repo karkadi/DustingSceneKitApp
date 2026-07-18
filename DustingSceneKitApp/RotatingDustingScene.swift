@@ -4,9 +4,9 @@
 //
 //  Created by Arkadiy KAZAZYAN on 27/10/2025.
 //
+
 import SpriteKit
 
-@MainActor
 class RotatingDustingScene: SKScene {
     
     private struct Particle {
@@ -16,7 +16,7 @@ class RotatingDustingScene: SKScene {
         var chaosVelocity: Coordinate3D
         var yRotation: CGFloat
         var yRotationSpeed: CGFloat
-
+        
         struct Coordinate3D {
             var x: CGFloat
             var y: CGFloat
@@ -54,8 +54,7 @@ class RotatingDustingScene: SKScene {
     
     override func didMove(to view: SKView) {
         backgroundColor = .black
-        
-        let titleLabel = SKLabelNode(text: "Rotating dusting desintegration")
+        let titleLabel = SKLabelNode(text: "Rotating dusting disintegration")
         titleLabel.fontName = "Arial-BoldMT"
         titleLabel.fontSize = 12
         titleLabel.fontColor = .white
@@ -117,6 +116,7 @@ class RotatingDustingScene: SKScene {
     
     private func goBackToPreviousScene() async {
         backButton.removeAllActions()
+        
         let fadeOut = SKAction.fadeOut(withDuration: 0.5)
         await backButton.runAsync(fadeOut)
         
@@ -144,10 +144,9 @@ class RotatingDustingScene: SKScene {
             print("Failed to decode Image")
             return
         }
-        
         let visiblePixels = imageInfo.pixels.filter { pixel in
-            var alpha: CGFloat = 0
-            pixel.color.getWhite(nil, alpha: &alpha)
+            var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
+            pixel.color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
             return alpha > 0.7
         }
         

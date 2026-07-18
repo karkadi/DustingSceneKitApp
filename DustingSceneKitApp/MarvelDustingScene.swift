@@ -4,6 +4,7 @@
 //
 //  Created by Arkadiy KAZAZYAN on 27/10/2025.
 //
+
 import SpriteKit
 
 class MarvelDustingScene: SKScene {
@@ -22,6 +23,7 @@ class MarvelDustingScene: SKScene {
             var y: CGFloat
             var z: CGFloat
         }
+        
         init(node: SKSpriteNode, point: CGPoint, layer: Int) {
             self.node = node
             self.origPoint = point
@@ -30,7 +32,7 @@ class MarvelDustingScene: SKScene {
                 x: CGFloat.random(in: -0.01...0.01),
                 y: CGFloat.random(in: -0.01...0.01),
                 z: CGFloat.random(in: -0.01...0.01)
-             )
+            )
             self.layer = layer
             self.hasStartedDisintegration = false
             self.isReturning = false
@@ -39,7 +41,6 @@ class MarvelDustingScene: SKScene {
     
     private var particles: [Particle] = []
     private var disintegrationStarted = false
-    private var integrationStarted = false
     private var targetPoint = CGPoint.zero
     private let totalLayers: Int = 16
     private let layerDelay = 0.1
@@ -48,7 +49,7 @@ class MarvelDustingScene: SKScene {
     override func didMove(to view: SKView) {
         backgroundColor = .black
         
-        let titleLabel = SKLabelNode(text: "Marvel dusting desintegration")
+        let titleLabel = SKLabelNode(text: "Marvel dusting disintegration")
         titleLabel.fontName = "Arial-BoldMT"
         titleLabel.fontSize = 12
         titleLabel.fontColor = .white
@@ -57,6 +58,7 @@ class MarvelDustingScene: SKScene {
         
         targetPoint = CGPoint(x: size.width * 0.4 + size.width / 2, y: size.height * 0.4 + size.height / 2)
         createNextSceneButton()
+        
         Task {
             await createParticlesFromImage(named: "lord", scale: 1.0)
         }
@@ -114,9 +116,8 @@ class MarvelDustingScene: SKScene {
         }
         
         let visiblePixels = imageInfo.pixels.filter { pixel in
-            var alpha: CGFloat = 0
-            var white: CGFloat = 0
-            pixel.color.getWhite(&white, alpha: &alpha)
+            var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
+            pixel.color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
             return alpha > 0.7
         }
         
@@ -127,7 +128,7 @@ class MarvelDustingScene: SKScene {
         let layerHeight = Double(maxY - minY) / Double(totalLayers)
         
         for pixel in visiblePixels {
-            let particleSize: CGFloat =  1.0
+            let particleSize: CGFloat = 1.0
             let particle = SKSpriteNode(color: pixel.color, size: CGSize(width: particleSize, height: particleSize))
             
             let x = CGFloat(pixel.x - imageInfo.width / 2) * scale + size.width / 2
